@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.controllers;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -39,4 +39,8 @@ public class OI {
   // Start the command when the button is released and let it run the command
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
+
+    public BobXboxController driveController = new BobXboxController(0);
+    public BobXboxController operatorController = new BobXboxController(1);
+
 }
