@@ -21,10 +21,10 @@ public class MecanumDrive
 
     public Output tankMecanumDrive(double leftValue, double rightValue, double strafeValue, double deadbandValue)
     {
-        double topLeftValue = handleDeadband(leftValue + strafeValue, deadbandValue);
-        double bottomLeftValue = handleDeadband(leftValue - strafeValue, deadbandValue);
-        double topRightValue = handleDeadband(rightValue - strafeValue, deadbandValue);
-        double bottomRightValue = handleDeadband(rightValue + strafeValue, deadbandValue);
+        double topLeftValue = handleDeadband(leftValue - strafeValue, deadbandValue);
+        double bottomLeftValue = handleDeadband(leftValue + strafeValue, deadbandValue);
+        double topRightValue = handleDeadband(rightValue + strafeValue, deadbandValue);
+        double bottomRightValue = handleDeadband(rightValue - strafeValue, deadbandValue);
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 
@@ -33,10 +33,12 @@ public class MecanumDrive
 
     public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, double deadbandValue)
     {
-        double topLeftValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue);
-        double bottomLeftValue = handleDeadband((forwardValue + rotationValue) - strafeValue, deadbandValue);
-        double topRightValue = handleDeadband((forwardValue - rotationValue) - strafeValue, deadbandValue);
-        double bottomRightValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue);
+        rotationValue = handleDeadband(rotationValue, deadbandValue);
+
+        double topLeftValue = handleDeadband((forwardValue - rotationValue) - strafeValue, deadbandValue);
+        double bottomLeftValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue);
+        double topRightValue = handleDeadband((forwardValue + rotationValue) + strafeValue, deadbandValue);
+        double bottomRightValue = handleDeadband((forwardValue + rotationValue) - strafeValue, deadbandValue);
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 

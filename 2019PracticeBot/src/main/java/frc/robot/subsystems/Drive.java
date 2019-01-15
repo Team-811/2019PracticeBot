@@ -39,13 +39,37 @@ public class Drive extends Subsystem {
       bottomLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
+      topLeftMotor.setInverted(true);
+      bottomLeftMotor.setInverted(true);
+
       drivetrain = new MecanumDrive();
   }
 
 
   public void DriveWithJoy(double leftJoy, double rightJoy, double leftTrigger, double rightTrigger)
   {
-      double strafe = rightTrigger - leftTrigger;
+      
+    if(leftTrigger <= 0.2)
+    {
+        leftTrigger = 0;
+    }
+    else
+    {
+        leftTrigger = leftTrigger;
+    }
+
+    if(rightTrigger <= 0.2)
+    {
+        rightTrigger = 0;
+    }
+    else
+    {
+        rightTrigger = rightTrigger;
+    }
+
+    
+    
+    double strafe = rightTrigger - leftTrigger;
       boolean quickTurn;
 
       if(leftJoy <= .2 && leftJoy >= -.2)
@@ -57,7 +81,8 @@ public class Drive extends Subsystem {
           quickTurn = false;
       }
 
-      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1);
+      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.2);
+      //Output driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.2);
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
