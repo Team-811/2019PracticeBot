@@ -80,9 +80,12 @@ public class Drive extends Subsystem {
       {
           quickTurn = false;
       }
-
-      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.2);
-      //Output driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.2);
+      int inverted=1;
+      if (Robot.controllers.operatorController.aButton.ispressed())
+         inverted=-1;
+        else
+        inverted=1;
+      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
