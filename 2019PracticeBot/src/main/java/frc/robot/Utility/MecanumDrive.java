@@ -34,7 +34,7 @@ public class MecanumDrive
     public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, double deadbandValue, int inverted)
     {
         rotationValue = handleDeadband(rotationValue, deadbandValue);
-        double topLeftValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue)*inverted;
+        double topLeftValue = handleDeadband((forwardValue + rotationValue) + strafeValue, deadbandValue)*inverted;
         double bottomLeftValue = handleDeadband((forwardValue + rotationValue) - strafeValue, deadbandValue)*inverted;
         double topRightValue = handleDeadband((forwardValue - rotationValue) - strafeValue, deadbandValue)*inverted;
         double bottomRightValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue)*inverted;

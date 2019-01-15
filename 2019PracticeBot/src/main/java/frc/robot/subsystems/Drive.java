@@ -81,7 +81,7 @@ public class Drive extends Subsystem {
           quickTurn = false;
       }
       int inverted=1;
-      if (Robot.controllers.operatorController.aButton.ispressed())
+      if (Robot.controllers.operatorController.aButton.get())
          inverted=-1;
         else
         inverted=1;
