@@ -67,7 +67,7 @@ public class Drive extends Subsystem {
 
 
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
-      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1);
+      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
       //Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle(), 0.2);
 

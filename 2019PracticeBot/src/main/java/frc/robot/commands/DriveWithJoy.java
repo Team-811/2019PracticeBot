@@ -25,7 +25,11 @@ public class DriveWithJoy extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+<<<<<<< HEAD
     Robot.drivetrain.DriveWithJoy(Robot.controllers.driveController.leftStick.getY(), Robot.controllers.driveController.rightStick.getX(), Robot.controllers.driveController.leftStick.getX());
+=======
+    Robot.drivetrain.DriveWithJoy(Robot.controllers.driveController.leftStick.getY(), Robot.controllers.driveController.rightStick.getX(), Robot.controllers.driveController.getRawAxis(2), Robot.controllers.driveController.getRawAxis(3));
+>>>>>>> 34603fe3975c41281cdb1a53327d153506a4ba82
   }
 
   // Make this return true when this Command no longer needs to run execute()
