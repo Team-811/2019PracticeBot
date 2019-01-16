@@ -189,6 +189,30 @@ public class MecanumDrive
         return driveOutput;
     }
 
+    public Output fieldOrientedDrive(double forwardValue, double strafeValue, double rotationValue, double gyroAngle, double deadbandValue)
+    {
+        double y = Math.sin(gyroAngle);
+        double x= Math.cos(gyroAngle);
+        double topLeftValue = handleDeadband((forwardValue*x - rotationValue) + strafeValue*y, deadbandValue);
+        double bottomLeftValue = handleDeadband((forwardValue*x + rotationValue) - strafeValue*y, deadbandValue);
+        double topRightValue = handleDeadband((forwardValue*x - rotationValue) - strafeValue*y, deadbandValue);
+        double bottomRightValue = handleDeadband((forwardValue*x - rotationValue) + strafeValue*y, deadbandValue);
+
+        driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
+
+        return driveOutput;
+    }
+
+
+
+
+
+
+
+
+
+
+
     private double handleDeadband(double val, double deadband) {
         return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;
     }

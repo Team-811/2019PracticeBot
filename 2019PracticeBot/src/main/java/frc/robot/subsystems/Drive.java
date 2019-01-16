@@ -7,8 +7,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 import frc.robot.Utility.MecanumDrive;
 import frc.robot.Utility.Output;
@@ -17,6 +19,8 @@ import frc.robot.commands.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.AHRSProtocol;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * Add your docs here.
@@ -30,6 +34,8 @@ public class Drive extends Subsystem {
   private TalonSRX bottomLeftMotor;
   private TalonSRX bottomRightMotor;
 
+  private AHRS gyro;
+
   private MecanumDrive drivetrain;
 
   public Drive()
@@ -39,13 +45,15 @@ public class Drive extends Subsystem {
       bottomLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
+      gyro = new AHRS(Port.kMXP);
+
       drivetrain = new MecanumDrive();
   }
 
 
-  public void DriveWithJoy(double leftJoy, double rightJoy, double leftTrigger, double rightTrigger)
+  public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
   {
-      double strafe = rightTrigger - leftTrigger;
+      
       boolean quickTurn;
 
       if(leftJoy <= .2 && leftJoy >= -.2)
@@ -57,8 +65,11 @@ public class Drive extends Subsystem {
           quickTurn = false;
       }
 
+
+      SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
       Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1);
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
+      //Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle(), 0.2);
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
