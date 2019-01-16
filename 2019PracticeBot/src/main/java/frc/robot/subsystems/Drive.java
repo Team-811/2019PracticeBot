@@ -69,15 +69,29 @@ public class Drive extends Subsystem {
       if(Robot.controllers.operatorController.aButton.get())
       {
             inverted = -1;
+            Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
+      }
+      else if (Robot.controllers.operatorController.bButton.get())
+      {
+          Output driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
+      }
+      else if (Robot.controllers.operatorController.xButton.get())
+      {
+          Output driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, -1);
+      }
+      else if (Robot.controllers.operatorController.yButton.get())
+      {
+          inverted = 1;  
+          Output driveOutput = drivetrain.RyanarcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
+
       }
       else
       {
-          inverted = 1;
+          inverted = 1;  
+          Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
+
       }
-
-
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
-      Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
       //Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle(), 0.2);
 
