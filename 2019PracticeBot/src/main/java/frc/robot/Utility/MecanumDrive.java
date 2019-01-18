@@ -47,10 +47,10 @@ public class MecanumDrive
     public Output arcadeMecanumDrive(double forwardValue, double rotationValue, double strafeValue, double deadbandValue, int inverted)
     {
         rotationValue = handleDeadband(rotationValue, deadbandValue);
-        double topLeftValue = handleDeadband((forwardValue + rotationValue) + strafeValue, deadbandValue)*inverted;
-        double bottomLeftValue = handleDeadband((forwardValue + rotationValue) - strafeValue, deadbandValue)*inverted;
-        double topRightValue = handleDeadband((forwardValue - rotationValue) - strafeValue, deadbandValue)*inverted;
-        double bottomRightValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue)*inverted;
+        double topLeftValue = handleDeadband((forwardValue + rotationValue) - strafeValue, deadbandValue)*inverted;
+        double bottomLeftValue = handleDeadband((forwardValue + rotationValue) + strafeValue, deadbandValue)*inverted;
+        double topRightValue = handleDeadband((forwardValue - rotationValue) + strafeValue, deadbandValue)*inverted;
+        double bottomRightValue = handleDeadband((forwardValue - rotationValue) - strafeValue, deadbandValue)*inverted;
 
         driveOutput.updateOutput(topLeftValue, topRightValue, bottomLeftValue, bottomRightValue);
 
@@ -211,7 +211,7 @@ public class MecanumDrive
         double strafe= -forwardValue*y + strafeValue*x;
 
 
-        double topLeftValue = handleDeadband((forward - rotationValue) + strafe, deadbandValue);
+        double topLeftValue = handleDeadband((forward + rotationValue) + strafe, deadbandValue);
         double bottomLeftValue = handleDeadband((forward + rotationValue) - strafe, deadbandValue);
         double topRightValue = handleDeadband((forward - rotationValue) - strafe, deadbandValue);
         double bottomRightValue = handleDeadband((forward - rotationValue) + strafe, deadbandValue);

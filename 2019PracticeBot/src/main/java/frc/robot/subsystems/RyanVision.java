@@ -1,4 +1,4 @@
-public class RyanVision
+/*public class RyanVision
 {
     private int [][] parameters; 
     private int [][] denselayers;
@@ -67,4 +67,4 @@ public class RyanVision
         return parameters*(picture*denselayers);
     }
     
-}
+}*/

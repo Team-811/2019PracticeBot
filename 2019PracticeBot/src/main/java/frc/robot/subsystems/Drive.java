@@ -8,7 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
@@ -45,7 +45,11 @@ public class Drive extends Subsystem {
       bottomLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
-      gyro = new AHRS(Port.kMXP);
+      topRightMotor.setInverted(true);
+      bottomRightMotor.setInverted(true);
+
+      gyro = new AHRS(SerialPort.Port.kMXP);
+      gyro.reset();
 
       drivetrain = new MecanumDrive();
   }
@@ -64,36 +68,31 @@ public class Drive extends Subsystem {
       {
           quickTurn = false;
       }
-
+      /*
       int inverted;
+      Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
       if(Robot.controllers.operatorController.aButton.get())
       {
             inverted = -1;
-            Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
+            driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
       }
       else if (Robot.controllers.operatorController.bButton.get())
       {
-          Output driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
+          driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
       }
       else if (Robot.controllers.operatorController.xButton.get())
       {
-          Output driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, -1);
+          driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, -1);
       }
       else if (Robot.controllers.operatorController.yButton.get())
       {
           inverted = 1;  
-          Output driveOutput = drivetrain.RyanarcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
-
+          driveOutput = drivetrain.RyanarcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
       }
-      else
-      {
-          inverted = 1;  
-          Output driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
-
-      }
+      */
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
-      //Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle(), 0.2);
+      Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle(), 0.2);
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
