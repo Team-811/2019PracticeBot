@@ -68,6 +68,7 @@ public class Drive extends Subsystem {
       {
           quickTurn = false;
       }
+
       /*
       int inverted;
       Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
@@ -90,9 +91,10 @@ public class Drive extends Subsystem {
           driveOutput = drivetrain.RyanarcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
       }
       */
+      
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
-      Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle(), 0.2);
+      Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle());
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
