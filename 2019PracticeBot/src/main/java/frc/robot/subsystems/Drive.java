@@ -52,6 +52,8 @@ public class Drive extends Subsystem {
       gyro.reset();
 
       drivetrain = new MecanumDrive();
+      drivetrain.invertForwardBackward(true);
+      drivetrain.invertStrafing(true);
   }
 
 
