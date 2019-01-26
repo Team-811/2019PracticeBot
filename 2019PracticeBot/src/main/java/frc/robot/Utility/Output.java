@@ -79,7 +79,9 @@ public class Output
     public void updateOutput(double leftValue, double rightValue)
     {
             motorTopLeft = handleLimits(leftValue);
+            motorBottomLeft = handleLimits(leftValue);
             motorTopRight = handleLimits(rightValue); 
+            motorBottomRight = handleLimits(rightValue);
     }
 
     public void updateOutput(double topLeftValue, double topRightValue, double bottomLeftValue, double bottomRightValue)

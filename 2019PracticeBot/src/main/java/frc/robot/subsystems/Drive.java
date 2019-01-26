@@ -116,10 +116,10 @@ public class Drive extends Subsystem {
       motionProfile.loadTrajectory(path);
   }
 
-  public void followTrajectory()
+  public void followTrajectory(boolean reverse)
   {
 
-    Output driveOutput = motionProfile.getNextDriveSignal();
+    Output driveOutput = motionProfile.getNextDriveSignal(reverse);
 
     topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue());
     topRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());

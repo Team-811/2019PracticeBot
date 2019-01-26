@@ -82,12 +82,19 @@ public class MotionProfiling
         }        
     }
 
-     public Output getNextDriveSignal(){
+     public Output getNextDriveSignal(boolean reverse){
+
+        int inverted = 1;
+
          if(isFinished()){
              driveOutput.updateOutput(0, 0);
  
              return driveOutput;
          }
+
+         if(reverse)
+            inverted = -1;
+        
  
          left = 0;
          right = 0;
@@ -102,7 +109,7 @@ public class MotionProfiling
          left = (-(angularVelocity * wheelbase) + (2 * linearVelocity)) / 2;
          right = ((angularVelocity * wheelbase) + (2 * linearVelocity)) / 2;
  
-         driveOutput.updateOutput(left, right);
+         driveOutput.updateOutput(left * inverted, right * inverted);
  
          segmentIndex++;
  
