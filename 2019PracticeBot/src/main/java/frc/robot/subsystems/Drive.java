@@ -13,9 +13,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 import frc.robot.Utility.MecanumDrive;
+import frc.robot.Utility.MotionProfiling;
 import frc.robot.Utility.Output;
 import frc.robot.commands.*;
-
+import jaci.pathfinder.Waypoint;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -38,6 +39,8 @@ public class Drive extends Subsystem {
 
   private MecanumDrive drivetrain;
 
+  private MotionProfiling motionProfile;
+
   public Drive()
   {
       topLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_TOP_LEFT_MOTOR);
@@ -54,6 +57,8 @@ public class Drive extends Subsystem {
       drivetrain = new MecanumDrive();
       drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
+
+      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, 0.7493);
   }
 
 
@@ -103,6 +108,28 @@ public class Drive extends Subsystem {
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
+  }
+
+
+  public void loadTrajectory(Waypoint[] path)
+  {
+      motionProfile.loadTrajectory(path);
+  }
+
+  public void followTrajectory()
+  {
+
+    Output driveOutput = motionProfile.getNextDriveSignal();
+
+    topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue());
+    topRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());
+    bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue());
+    bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());
+  }
+
+  public boolean trajectoryIsFinished()
+  {
+        return motionProfile.isFinished();
   }
 
   @Override
