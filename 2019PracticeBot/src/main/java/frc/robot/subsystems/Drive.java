@@ -18,6 +18,8 @@ import frc.robot.Utility.Output;
 import frc.robot.commands.*;
 import jaci.pathfinder.Waypoint;
 
+import javax.swing.plaf.TreeUI;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -49,11 +51,14 @@ public class Drive extends Subsystem {
       bottomLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
-      topLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 1);
-      topRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 1);
+      bottomLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 1);
+      bottomRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 1);
 
-      topLeftMotor.setSensorPhase(false);
-      topRightMotor.setSensorPhase(false);
+      bottomLeftMotor.setSensorPhase(true);
+      bottomRightMotor.setSensorPhase(true);
+
+      bottomLeftMotor.setSelectedSensorPosition(0);
+      bottomRightMotor.setSelectedSensorPosition(0);
 
       topRightMotor.setInverted(true);
       bottomRightMotor.setInverted(true);
@@ -107,6 +112,8 @@ public class Drive extends Subsystem {
       */
       
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
+      SmartDashboard.putNumber("LeftEncoder", bottomLeftMotor.getSelectedSensorPosition());
+      SmartDashboard.putNumber("RightEncoder", bottomRightMotor.getSelectedSensorPosition());
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
       Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle());
 
@@ -126,8 +133,8 @@ public class Drive extends Subsystem {
   public void followTrajectory(boolean reverse)
   {
 
-    double leftEncoderMeters = encoderTicksToMeters(topLeftMotor.getSelectedSensorPosition(), 0.1524);
-    double rightEncoderMeters = encoderTicksToMeters(topRightMotor.getSelectedSensorPosition(), 0.1524);
+    double leftEncoderMeters = encoderTicksToMeters(bottomLeftMotor.getSelectedSensorPosition(), 0.1524);
+    double rightEncoderMeters = encoderTicksToMeters(bottomRightMotor.getSelectedSensorPosition(), 0.1524);
 
     Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle());
 
@@ -145,6 +152,13 @@ public class Drive extends Subsystem {
   private double encoderTicksToMeters(double encoderTicks, double wheelDiameter)
   {
         return (encoderTicks * 1024)/(2 * Math.PI * wheelDiameter);
+  }
+
+  public void zeroSensors()
+  {
+    bottomLeftMotor.setSelectedSensorPosition(0);
+    bottomRightMotor.setSelectedSensorPosition(0);
+    gyro.reset();
   }
 
   @Override

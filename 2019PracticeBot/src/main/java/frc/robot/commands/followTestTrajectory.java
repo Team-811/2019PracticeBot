@@ -21,13 +21,16 @@ public class followTestTrajectory extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    System.out.println("Generating");
     Robot.drivetrain.loadTrajectory(TestTrajectory.testPath);
+    Robot.drivetrain.zeroSensors();
 
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    System.out.println("Beginning follower");
     Robot.drivetrain.followTrajectory(false);
   }
 
@@ -40,6 +43,7 @@ public class followTestTrajectory extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    System.out.println("Finished");
   }
 
   // Called when another command which requires one or more of the same
