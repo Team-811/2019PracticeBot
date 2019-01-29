@@ -16,12 +16,20 @@ public class Odometry
     private double yCoordinate;
     private double theta;
 
+    private double initialX;
+    private double initialY;
+    private double initialTheta;
+
     //Default Constructor
     public Odometry()
     {
         xCoordinate = 0;
         yCoordinate = 0;
         theta = 0;
+
+        initialX = 0;
+        initialY = 0;
+        initialTheta = 0;
     }
 
     //Parameterized constructor
@@ -30,6 +38,10 @@ public class Odometry
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.theta = theta;
+
+        initialX = 0;
+        initialY = 0;
+        initialTheta = 0;
     }
 
     //Getter methods
@@ -65,6 +77,20 @@ public class Odometry
 
     public void setTheta(double theta)
     {
+        this.theta = theta;
+    }
+
+    public void setRobotOdometry(double encoderLeft, double encoderRight, double gyroAngle)
+    {
+        this.xCoordinate = (Math.cos(gyroAngle) * (encoderLeft + encoderRight)/2) + initialX;
+        this.yCoordinate = (Math.cos(gyroAngle) * (encoderLeft + encoderRight)/2) + initialY;
+        this.theta = Math.toRadians(gyroAngle) + initialTheta;
+    }
+
+    public void setInitialRobotOdometry(double x, double y, double theta)
+    {
+        this.xCoordinate = x;
+        this.yCoordinate = y;
         this.theta = theta;
     }
 

@@ -19,6 +19,7 @@ import frc.robot.commands.*;
 import jaci.pathfinder.Waypoint;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.AHRSProtocol;
 import com.kauailabs.navx.frc.AHRS;
@@ -48,6 +49,12 @@ public class Drive extends Subsystem {
       bottomLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(Robot.robotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
+      topLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 1);
+      topRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 1);
+
+      topLeftMotor.setSensorPhase(false);
+      topRightMotor.setSensorPhase(false);
+
       topRightMotor.setInverted(true);
       bottomRightMotor.setInverted(true);
 
@@ -55,8 +62,8 @@ public class Drive extends Subsystem {
       gyro.reset();
 
       drivetrain = new MecanumDrive();
-      drivetrain.invertForwardBackward(true);
-      drivetrain.invertStrafing(true);
+      drivetrain.invertForwardBackward(false);
+      drivetrain.invertStrafing(false);
 
       motionProfile = new MotionProfiling(0.55, 0.55, 0.55, 0.7493);
   }
@@ -119,7 +126,10 @@ public class Drive extends Subsystem {
   public void followTrajectory(boolean reverse)
   {
 
-    Output driveOutput = motionProfile.getNextDriveSignal(reverse);
+    double leftEncoderMeters = encoderTicksToMeters(topLeftMotor.getSelectedSensorPosition(), 0.1524);
+    double rightEncoderMeters = encoderTicksToMeters(topRightMotor.getSelectedSensorPosition(), 0.1524);
+
+    Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle());
 
     topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue());
     topRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());
@@ -130,6 +140,11 @@ public class Drive extends Subsystem {
   public boolean trajectoryIsFinished()
   {
         return motionProfile.isFinished();
+  }
+
+  private double encoderTicksToMeters(double encoderTicks, double wheelDiameter)
+  {
+        return (encoderTicks * 1024)/(2 * Math.PI * wheelDiameter);
   }
 
   @Override

@@ -27,10 +27,10 @@ public class MotionProfiling
     private Trajectory trajectory;
 
      //Should be greater than zero and this increases correction
-     private static final double b = 1.0;
+     private static final double b = 1.5;
 
      //Should be between zero and one and this increases dampening
-     private static final double zeta = 0.2;
+     private static final double zeta = 0.7;
  
      //Holds what segment we are on
      private int segmentIndex;
@@ -60,6 +60,9 @@ public class MotionProfiling
         this.maxAcceleration = maxAcceleration;
         this.maxJerk = maxJerk;
         this.wheelbase = wheelbase;
+
+        odometry = new Odometry();
+        driveOutput = new Output();
     }
 
 
@@ -80,9 +83,12 @@ public class MotionProfiling
             System.out.println(pathHash + ".csv read from file");
             trajectory = Pathfinder.readFromCSV(trajectoryFile);
         }        
+
+        segmentIndex = 0;
+        setInitialOdometry();
     }
 
-     public Output getNextDriveSignal(boolean reverse){
+     public Output getNextDriveSignal(boolean reverse, double leftEncoderMeters, double rightEncoderMeters, double gyroAngle){
 
         int inverted = 1;
 
@@ -98,6 +104,8 @@ public class MotionProfiling
  
          left = 0;
          right = 0;
+
+         odometry.setRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle);
  
          current = trajectory.get(segmentIndex);
  
@@ -165,9 +173,7 @@ public class MotionProfiling
      }
  
      public void setInitialOdometry(){
-         odometry.setX(trajectory.get(0).x);
-         odometry.setY(trajectory.get(0).y);
-         odometry.setTheta(trajectory.get(0).heading);
+         odometry.setInitialRobotOdometry(trajectory.get(0).x, trajectory.get(0).y, trajectory.get(0).heading);
      }
  
      public boolean isFinished(){
