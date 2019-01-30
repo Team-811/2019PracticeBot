@@ -47,7 +47,7 @@ public class Drive extends Subsystem {
 
   private final int kTimeoutMs = 30;
 
-  private final double wheelDiameter = 0.7493;
+  private final double wheelDiameter = 0.1524;
 
   private int kP;
   private int kI;
@@ -103,7 +103,7 @@ public class Drive extends Subsystem {
       drivetrain.invertForwardBackward(false);
       drivetrain.invertStrafing(false);
 
-      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, wheelDiameter);
+      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, 0.7493);
   }
 
 
@@ -168,8 +168,8 @@ public class Drive extends Subsystem {
   public void followTrajectory(boolean reverse)
   {
 
-    double leftEncoderMeters = encoderTicksToMeters(bottomLeftMotor.getSelectedSensorPosition(), 0.1524);
-    double rightEncoderMeters = encoderTicksToMeters(bottomRightMotor.getSelectedSensorPosition(), 0.1524);
+    double leftEncoderMeters = encoderTicksToMeters(bottomLeftMotor.getSelectedSensorPosition(), wheelDiameter);
+    double rightEncoderMeters = encoderTicksToMeters(bottomRightMotor.getSelectedSensorPosition(), wheelDiameter);
 
     Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle());
 
@@ -223,7 +223,7 @@ public class Drive extends Subsystem {
 
   private double unitsPer100MSToMetersPerSecond(double velocity, double wheelDiameter)
   {
-    return velocity * (2 * Math.PI * wheelDiameter) * 10 / 1024);
+    return velocity * ((2 * Math.PI * wheelDiameter) * 10 / 1024);
   }
 
   public void zeroSensors()
