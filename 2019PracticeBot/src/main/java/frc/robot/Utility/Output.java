@@ -78,18 +78,18 @@ public class Output
 
     public void updateOutput(double leftValue, double rightValue)
     {
-            motorTopLeft = handleLimits(leftValue);
-            motorBottomLeft = handleLimits(leftValue);
-            motorTopRight = handleLimits(rightValue); 
-            motorBottomRight = handleLimits(rightValue);
+            motorTopLeft = leftValue;
+            motorBottomLeft = leftValue;
+            motorTopRight = rightValue; 
+            motorBottomRight = rightValue;
     }
 
     public void updateOutput(double topLeftValue, double topRightValue, double bottomLeftValue, double bottomRightValue)
     {
-        motorTopLeft = handleLimits(topLeftValue);
-        motorTopRight = handleLimits(topRightValue);
-        motorBottomLeft = handleLimits(bottomLeftValue);
-        motorBottomRight = handleLimits(bottomRightValue);
+        motorTopLeft = topLeftValue;
+        motorTopRight = topRightValue;
+        motorBottomLeft = bottomLeftValue;
+        motorBottomRight = bottomRightValue;
     }
 
     //Clear all values
@@ -102,21 +102,4 @@ public class Output
         motorBottomRight = 0;
     }
 
-
-
-    private double handleLimits(double input)
-    {
-        if(input > 1 )
-        {
-            return 1;
-        }
-        else if(input < -1)
-        {
-            return -1;
-        }
-        else
-        {
-            return input;
-        }
-    }
 }

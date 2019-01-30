@@ -44,6 +44,16 @@ public class Drive extends Subsystem {
 
   private MotionProfiling motionProfile;
 
+
+  private final int kTimeoutMs = 30;
+
+  private final double wheelDiameter = 0.7493;
+
+  private int kP;
+  private int kI;
+  private int kD;
+  private int kF;
+
   public Drive()
   {
       topLeftMotor = new TalonSRX(Robot.robotMap.DRIVE_TOP_LEFT_MOTOR);
@@ -60,6 +70,29 @@ public class Drive extends Subsystem {
       bottomLeftMotor.setSelectedSensorPosition(0);
       bottomRightMotor.setSelectedSensorPosition(0);
 
+      bottomLeftMotor.configNominalOutputForward(0, kTimeoutMs);
+      bottomLeftMotor.configNominalOutputReverse(0, kTimeoutMs);
+      bottomLeftMotor.configPeakOutputForward(1, kTimeoutMs);
+      bottomLeftMotor.configPeakOutputReverse(-1, kTimeoutMs);
+
+		/* Config the Velocity closed loop gains in slot0 */
+	    bottomLeftMotor.config_kF(0, kF, kTimeoutMs);
+		bottomLeftMotor.config_kP(0, kP, kTimeoutMs);
+		bottomLeftMotor.config_kI(0, kI, kTimeoutMs);
+        bottomLeftMotor.config_kD(0, kD, kTimeoutMs);
+        
+
+    bottomRightMotor.configNominalOutputForward(0, kTimeoutMs);
+    bottomRightMotor.configNominalOutputReverse(0, kTimeoutMs);
+    bottomRightMotor.configPeakOutputForward(1, kTimeoutMs);
+    bottomRightMotor.configPeakOutputReverse(-1, kTimeoutMs);
+
+		/* Config the Velocity closed loop gains in slot0 */
+		bottomRightMotor.config_kF(0, kF, kTimeoutMs);
+		bottomRightMotor.config_kP(0, kP, kTimeoutMs);
+		bottomRightMotor.config_kI(0, kI, kTimeoutMs);
+		bottomRightMotor.config_kD(0, kD, kTimeoutMs);
+
       topRightMotor.setInverted(true);
       bottomRightMotor.setInverted(true);
 
@@ -70,7 +103,7 @@ public class Drive extends Subsystem {
       drivetrain.invertForwardBackward(false);
       drivetrain.invertStrafing(false);
 
-      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, 0.7493);
+      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, wheelDiameter);
   }
 
 
@@ -114,6 +147,8 @@ public class Drive extends Subsystem {
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
       SmartDashboard.putNumber("LeftEncoder", bottomLeftMotor.getSelectedSensorPosition());
       SmartDashboard.putNumber("RightEncoder", bottomRightMotor.getSelectedSensorPosition());
+      SmartDashboard.putNumber("Left Velocity", unitsPer100MSToMetersPerSecond(bottomLeftMotor.getSelectedSensorVelocity(), wheelDiameter));
+      SmartDashboard.putNumber("Right Velocity", unitsPer100MSToMetersPerSecond(bottomRightMotor.getSelectedSensorVelocity(), wheelDiameter));
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
       Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle());
 
@@ -138,11 +173,38 @@ public class Drive extends Subsystem {
 
     Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle());
 
-    topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue());
-    topRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());
-    bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getLeftValue());
-    bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());
+    double velocityLeft = metersPerSecondToUnitsPer100MS(driveOutput.getLeftValue(), wheelDiameter);
+    double velocityRight = metersPerSecondToUnitsPer100MS(driveOutput.getLeftValue(), wheelDiameter);
+
+    topLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    topRightMotor.set(ControlMode.Velocity, velocityRight);
+    bottomLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    bottomRightMotor.set(ControlMode.Velocity, velocityRight);
   }
+
+  public void setVelocityTo1()
+  {
+    double velocityLeft = metersPerSecondToUnitsPer100MS(1, wheelDiameter);
+    double velocityRight = metersPerSecondToUnitsPer100MS(1, wheelDiameter);
+
+    topLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    topRightMotor.set(ControlMode.Velocity, velocityRight);
+    bottomLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    bottomRightMotor.set(ControlMode.Velocity, velocityRight);
+  }
+
+  public void setVelocityTo0()
+  {
+    double velocityLeft = metersPerSecondToUnitsPer100MS(1, wheelDiameter);
+    double velocityRight = metersPerSecondToUnitsPer100MS(1, wheelDiameter);
+
+    topLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    topRightMotor.set(ControlMode.Velocity, velocityRight);
+    bottomLeftMotor.set(ControlMode.Velocity, velocityLeft);
+    bottomRightMotor.set(ControlMode.Velocity, velocityRight);
+  }
+
+
 
   public boolean trajectoryIsFinished()
   {
@@ -152,6 +214,16 @@ public class Drive extends Subsystem {
   private double encoderTicksToMeters(double encoderTicks, double wheelDiameter)
   {
         return (encoderTicks * 1024)/(2 * Math.PI * wheelDiameter);
+  }
+
+  private double metersPerSecondToUnitsPer100MS(double velocity, double wheelDiameter)
+  {
+      return (velocity * (1/(2 * Math.PI * wheelDiameter)) * 1024 / 10);
+  }
+
+  private double unitsPer100MSToMetersPerSecond(double velocity, double wheelDiameter)
+  {
+    return velocity * (2 * Math.PI * wheelDiameter) * 10 / 1024);
   }
 
   public void zeroSensors()

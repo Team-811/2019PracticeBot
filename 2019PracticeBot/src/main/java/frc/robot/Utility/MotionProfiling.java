@@ -106,6 +106,11 @@ public class MotionProfiling
          right = 0;
 
          odometry.setRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle);
+
+         if(segmentIndex == 0)
+         {
+             odometry.setInitialRobotState(leftEncoderMeters, rightEncoderMeters, gyroAngle);
+         }
  
          current = trajectory.get(segmentIndex);
  
@@ -136,14 +141,14 @@ public class MotionProfiling
  
      private double calculateLinearVelocity(double desiredX, double desiredY, double desiredTheta, double desiredLinearVelocity, double desiredAngularVelocity){
          k = calculateK(desiredLinearVelocity, desiredAngularVelocity);
-         thetaError = boundHalfRadians(desiredTheta - odometry.getTheta());
-         odometryError = calculateOdometryError(odometry.getTheta(), desiredX, odometry.getX(), desiredY, odometry.getY());
+         thetaError = boundHalfRadians(desiredTheta - odometry.getThetaInRadians());
+         odometryError = calculateOdometryError(odometry.getThetaInRadians(), desiredX, odometry.getX(), desiredY, odometry.getY());
          return (desiredLinearVelocity * Math.cos(thetaError)) + (k * odometryError);
      }
  
      private double calculateAngularVelocity(double desiredX, double desiredY, double desiredTheta, double desiredLinearVelocity, double desiredAngularVelocity){
          k = calculateK(desiredLinearVelocity, desiredAngularVelocity);
-         thetaError = boundHalfRadians(desiredTheta - odometry.getTheta());
+         thetaError = boundHalfRadians(desiredTheta - odometry.getThetaInRadians());
  
          if(Math.abs(thetaError) < EPSILON){
              //This is for the limit as sin(x)/x approaches zero
@@ -152,7 +157,7 @@ public class MotionProfiling
              sinThetaErrorOverThetaError = Math.sin(thetaError)/thetaError;
          }
  
-         odometryError = calculateOdometryError(odometry.getTheta(), desiredX, odometry.getX(), desiredY, odometry.getY());
+         odometryError = calculateOdometryError(odometry.getThetaInRadians(), desiredX, odometry.getX(), desiredY, odometry.getY());
  
          return desiredAngularVelocity + (b * desiredLinearVelocity * sinThetaErrorOverThetaError * odometryError) + (k * thetaError);
      }
