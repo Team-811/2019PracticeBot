@@ -102,7 +102,7 @@ public class MotionProfiling
             inverted = -1;
         
  
-         left = 0;
+         left = 0; 
          right = 0;
 
          odometry.setRobotOdometry(leftEncoderMeters, rightEncoderMeters, gyroAngle);

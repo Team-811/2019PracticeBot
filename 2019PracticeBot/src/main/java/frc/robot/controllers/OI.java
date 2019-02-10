@@ -8,6 +8,7 @@
 package frc.robot.controllers;
 
 import frc.robot.commands.followTestTrajectory;
+import frc.robot.commands.LED.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -51,6 +52,13 @@ public class OI {
     operatorController = new BobXboxController(1, 0.2, 0.2);
 
     driveController.aButton.whenPressed(new followTestTrajectory());
+    driveController.Dpad.Down.whenPressed(new RedFlame());
+    driveController.Dpad.DownLeft.whenPressed(new ChaseRainbow());
+    driveController.Dpad.DownRight.whenPressed(new BlueYellowSnake());
+    driveController.Dpad.Left.whenPressed(new Confetti());
+    driveController.Dpad.UpLeft.whenPressed(new Rainbow());
+    driveController.Dpad.UpRight.whenPressed(new RainbowDotTrail());
+    driveController.Dpad.Right.whenPressed(new RainbowSnake());
   }
 
     

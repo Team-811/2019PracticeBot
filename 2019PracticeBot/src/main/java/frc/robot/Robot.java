@@ -26,6 +26,7 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   public static Drive drivetrain = new Drive();
   public static RobotMap robotMap = new RobotMap();
+  public static LED led = new LED();
   public static OI controllers; 
 
   //Command m_autonomousCommand;
