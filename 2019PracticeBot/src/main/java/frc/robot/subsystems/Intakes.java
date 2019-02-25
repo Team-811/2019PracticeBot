@@ -45,7 +45,7 @@ public class Intakes extends Subsystem{
 
   private DoubleSolenoid cargoPiston;
   private TalonSRX cargoMotor;
-  private AnalogInput distanceSensor;
+  public AnalogInput distanceSensor;
 
   public Intakes()
   {
@@ -61,13 +61,13 @@ public class Intakes extends Subsystem{
 
    public void intakeCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, -1);
+      cargoMotor.set(ControlMode.PercentOutput, 0.6);
       
   }
 
    public void releaseCargo()
   {
-      cargoMotor.set(ControlMode.PercentOutput, 1);
+      cargoMotor.set(ControlMode.PercentOutput, -0.6);
   }
 
   public void stopCargo()
@@ -77,7 +77,7 @@ public class Intakes extends Subsystem{
 
   public boolean hasCargo()
   {
-      if(distanceSensor.getVoltage() > 0.828)  //Any object that is 7cm or closer will produce 0.8V or more
+      if(distanceSensor.getVoltage() > 0.8)  //Any object that is 7cm or closer will produce 0.8V or more
         return true;
       else
         return false;

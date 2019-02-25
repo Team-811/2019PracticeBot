@@ -131,6 +131,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    SmartDashboard.putNumber("Distance Sensor", intakes.distanceSensor.getVoltage());
+    SmartDashboard.putBoolean("Has Ball", intakes.distanceSensor.getVoltage() >= 0.828);
   }
 
   /**
