@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controllers.OI;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,6 +31,8 @@ public class Robot extends TimedRobot {
   public static Intakes intakes = Intakes.getInstance();
   public static OI controllers; 
 
+
+
   //Command m_autonomousCommand;
   //SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -39,6 +43,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     controllers = new OI();
+
+    CameraServer.getInstance().startAutomaticCapture();
+    //SmartDashboard CameraServer
+
     //m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     //SmartDashboard.putData("Auto mode", m_chooser);

@@ -48,6 +48,7 @@ public class Drive extends Subsystem {
   private final int kTimeoutMs = 30;
 
   private final double wheelDiameter = 0.1524;
+  private final double wheelbase = 0.7493;
 
   private int kP;
   private int kI;
@@ -103,46 +104,13 @@ public class Drive extends Subsystem {
       drivetrain.invertForwardBackward(false);
       drivetrain.invertStrafing(false);
 
-      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, 0.7493);
+      motionProfile = new MotionProfiling(0.55, 0.55, 0.55, wheelbase);
   }
 
 
   public void DriveWithJoy(double leftJoy, double rightJoy, double strafe)
   {
       
-      boolean quickTurn;
-
-      if(leftJoy <= .2 && leftJoy >= -.2)
-      {
-          quickTurn = true;
-      }
-      else
-      {
-          quickTurn = false;
-      }
-
-      /*
-      int inverted;
-      Output driveOutput=drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
-      if(Robot.controllers.operatorController.aButton.get())
-      {
-            inverted = -1;
-            driveOutput = drivetrain.arcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
-      }
-      else if (Robot.controllers.operatorController.bButton.get())
-      {
-          driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, 1);
-      }
-      else if (Robot.controllers.operatorController.xButton.get())
-      {
-          driveOutput = drivetrain.tankMecanumDrive(leftJoy, rightJoy, strafe, 0.1, -1);
-      }
-      else if (Robot.controllers.operatorController.yButton.get())
-      {
-          inverted = 1;  
-          driveOutput = drivetrain.RyanarcadeMecanumDrive(leftJoy, rightJoy, strafe, 0.1, inverted);
-      }
-      */
       
       SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
       SmartDashboard.putNumber("LeftEncoder", bottomLeftMotor.getSelectedSensorPosition());
@@ -150,13 +118,21 @@ public class Drive extends Subsystem {
       SmartDashboard.putNumber("Left Velocity", unitsPer100MSToMetersPerSecond(bottomLeftMotor.getSelectedSensorVelocity(), wheelDiameter));
       SmartDashboard.putNumber("Right Velocity", unitsPer100MSToMetersPerSecond(bottomRightMotor.getSelectedSensorVelocity(), wheelDiameter));
       //Output driveOutput = drivetrain.curvatureMecanumDrive(leftJoy, rightJoy, quickTurn, false, strafe, 0.1);
-      Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy, gyro.getAngle());
+      double correction = gyroCorrection(3 * rightJoy);
+      Output driveOutput = drivetrain.fieldOrientedDrive(leftJoy, strafe, rightJoy + correction, gyro.getAngle());
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
+  }
+
+  private double gyroCorrectRate = 0.02;
+
+  public double gyroCorrection(double tangentialVelocity)
+  {
+      return ( (tangentialVelocity/(wheelbase/2)) - Math.toRadians(gyro.getAngle()) ) * gyroCorrectRate;
   }
 
 

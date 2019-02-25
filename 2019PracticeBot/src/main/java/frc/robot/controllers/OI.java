@@ -8,7 +8,11 @@
 package frc.robot.controllers;
 
 import frc.robot.commands.followTestTrajectory;
+<<<<<<< HEAD
 import frc.robot.commands.Intakes.InstantCommands.*;
+=======
+import frc.robot.commands.LED.*;
+>>>>>>> dcab1e972455e112afb4f2a0eff8f153c9262a47
 
 /**
  * This class is the glue that binds the controls on the physical operator
