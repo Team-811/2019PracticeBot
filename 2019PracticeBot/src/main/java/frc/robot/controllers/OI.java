@@ -8,6 +8,7 @@
 package frc.robot.controllers;
 
 import frc.robot.commands.followTestTrajectory;
+import frc.robot.commands.Intakes.InstantCommands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -51,6 +52,11 @@ public class OI {
     operatorController = new BobXboxController(1, 0.2, 0.2);
 
     driveController.aButton.whenPressed(new followTestTrajectory());
+
+    operatorController.aButton.whenPressed(new GrabCargo());
+    operatorController.bButton.whenPressed(new StopCargo());
+    operatorController.xButton.whenPressed(new GrabCargoWithSensor());
+    operatorController.yButton.whenPressed(new ReleaseCargo());
   }
 
     

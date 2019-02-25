@@ -28,4 +28,7 @@ public class RobotMap {
   public static final int DRIVE_TOP_RIGHT_MOTOR = 1;
   public static final int DRIVE_BOTTOM_LEFT_MOTOR = 2;
   public static final int DRIVE_BOTTOM_RIGHT_MOTOR = 3;
+
+  public static final int INTAKE_CARGO_MOTOR = 4;
+  public static final int INTAKE_DISTANCE_SENSOR = 0;
 }
