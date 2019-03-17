@@ -26,9 +26,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static Drive drivetrain = new Drive();
+  public static Drivetrain drivetrain = new Drivetrain();
   public static RobotMap robotMap = new RobotMap();
-  public static Intakes intakes = Intakes.getInstance();
+  public static RobotStateEstimator stateEstimator = new RobotStateEstimator();
   public static OI controllers; 
 
 
@@ -131,8 +131,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    SmartDashboard.putNumber("Distance Sensor", intakes.distanceSensor.getVoltage());
-    SmartDashboard.putBoolean("Has Ball", intakes.distanceSensor.getVoltage() >= 0.828);
   }
 
   /**
