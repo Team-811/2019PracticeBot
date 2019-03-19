@@ -321,34 +321,24 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     return UnitConverter.ticksToMeters(topRightMotor.getSelectedSensorPosition(), 1373, Constants.wheelDiameter);
   }
 
-  public double getBottomLeftEncoder()
-  {
-    return UnitConverter.ticksToMeters(bottomLeftMotor.getSelectedSensorPosition(), 1024, Constants.wheelDiameter);
-  }
-
-  public double getBottomRightEncoder()
-  {
-    return UnitConverter.ticksToMeters(bottomRightMotor.getSelectedSensorPosition(), 1024, Constants.wheelDiameter);
-  }
-
   public double getLeftEncoder()
   {
-    return (getTopLeftEncoder() + getBottomLeftEncoder()) / 2;
+    return getTopLeftEncoder();
   }
 
   public double getLeftStrafe()
   {
-    return (getTopLeftEncoder() - getBottomLeftEncoder()) * Constants.strafeTrackScrubFactor / 2;
+    return getTopLeftEncoder() * Constants.strafeTrackScrubFactor;
   }
 
   public double getRightEncoder()
   {
-    return (getTopRightEncoder() + getBottomRightEncoder()) / 2;
+    return getTopRightEncoder();
   }
 
   public double getRightStrafe()
   {
-    return -(getTopRightEncoder() - getBottomRightEncoder()) * Constants.strafeTrackScrubFactor / 2;
+    return -getTopRightEncoder() * Constants.strafeTrackScrubFactor;
   }
 
   public double getForwardEncoder()
@@ -383,34 +373,24 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     return UnitConverter.talonUnitsToMetersPerSecond(topRightMotor.getSelectedSensorVelocity(), Constants.ticksPerRotation, Constants.wheelDiameter);
   }
 
-  public double getBottomLeftVelocity()
-  {
-    return UnitConverter.talonUnitsToMetersPerSecond(bottomLeftMotor.getSelectedSensorVelocity(), Constants.ticksPerRotation, Constants.wheelDiameter);
-  }
-
-  public double getBottomRightVelocity()
-  {
-    return UnitConverter.talonUnitsToMetersPerSecond(bottomRightMotor.getSelectedSensorVelocity(), Constants.ticksPerRotation, Constants.wheelDiameter);
-  }
-
   public double getLeftVelocity()
   {
-    return (getTopLeftVelocity() + getBottomLeftVelocity()) / 2;
+    return getTopLeftVelocity();
   }
 
   public double getLeftStrafeVelocity()
   {
-    return (getTopLeftVelocity() - getBottomLeftVelocity()) * Constants.strafeTrackScrubFactor / 2;
+    return getLeftVelocity() * Constants.strafeTrackScrubFactor;
   }
 
   public double getRightVelocity()
   {
-    return (getTopRightVelocity() + getBottomRightVelocity()) / 2;
+    return getTopRightVelocity();
   }
 
   public double getRightStrafeVelocity()
   {
-    return -(getTopRightVelocity() - getBottomRightVelocity()) * Constants.strafeTrackScrubFactor / 2;
+    return -getTopRightVelocity()  * Constants.strafeTrackScrubFactor ;
   }
 
   public double getForwardVelocity()
@@ -468,8 +448,6 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
     topLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     topRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    bottomLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    bottomRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     topLeftMotor.setSensorPhase(false);
     topRightMotor.setSensorPhase(true);
@@ -518,8 +496,6 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
       SmartDashboard.putNumber("Top Left Encoder", getTopLeftEncoder());
       SmartDashboard.putNumber("Top Right Encoder", getTopRightEncoder());
-      SmartDashboard.putNumber("Bottom Left Encoder", getBottomLeftEncoder());
-      SmartDashboard.putNumber("Bottom Right Encoder", getBottomRightEncoder());
       SmartDashboard.putNumber("Strafe", getStrafeEncoder());
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
   }
