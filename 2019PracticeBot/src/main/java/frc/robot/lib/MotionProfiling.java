@@ -81,15 +81,15 @@ public class MotionProfiling
 
         //Load trajectory from file if it exists, else generate the trajectory and save it 
         String pathHash = String.valueOf(path.hashCode());
-        File trajectoryFile = new File("/home/lvuser/paths/" + pathHash + ".csv");
-        if (!trajectoryFile.exists()) {
+        //File trajectoryFile = new File("/home/lvuser/paths/" + pathHash + ".csv");
+        //if (!trajectoryFile.exists()) {
             trajectory = Pathfinder.generate(path, cfg);
-            Pathfinder.writeToCSV(trajectoryFile, trajectory);
-            System.out.println(pathHash + ".csv not found, wrote to file");
-        } else {
-            System.out.println(pathHash + ".csv read from file");
-            trajectory = Pathfinder.readFromCSV(trajectoryFile);
-        }        
+            //Pathfinder.writeToCSV(trajectoryFile, trajectory);
+            //System.out.println(pathHash + ".csv not found, wrote to file");
+        //} else {
+            //System.out.println(pathHash + ".csv read from file");
+            //trajectory = Pathfinder.readFromCSV(trajectoryFile);
+        //}        
 
         if(reverse)
             trajectory = reversePath(trajectory);

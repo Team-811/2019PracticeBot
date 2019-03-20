@@ -85,10 +85,10 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private double kDStrafe;
   private double kFStrafe;
 
-  private double kPVelocity;
+  private double kPVelocity = 0.001;
   private double kIVelocity;
   private double kDVelocity;
-  private double kFVelocity;
+  private double kFVelocity = 0.24;
 
   private int kTimeoutMs;
 
@@ -116,7 +116,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       configurePID();
       
 
-      drivetrain.invertForwardBackward(false);
+      drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
       drivetrain.invertRotation(false);
   }
