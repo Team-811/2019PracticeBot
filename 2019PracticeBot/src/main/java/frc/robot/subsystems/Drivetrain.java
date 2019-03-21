@@ -177,8 +177,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
       topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
-      bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue() * 0.8);
-      bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue() * 0.8);
+      bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
+      bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
 
       
       prevAngle = getGyroAngle(); //Stores previous angle
@@ -213,7 +213,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   public void followTrajectory(boolean reverse)
   {
 
-    Output driveOutput = motionProfile.getNextDriveSignal(reverse, topLeftMotor.getSelectedSensorPosition(), topRightMotor.getSelectedSensorPosition(), gyro.getAngle(), false);
+    Output driveOutput = motionProfile.getNextDriveSignal(reverse, getLeftEncoder(), getRightEncoder(), gyro.getAngle(), false);
 
     double velocityLeft = UnitConverter.metersPerSecondToTalonUnits(driveOutput.getLeftValue(), Constants.wheelDiameter, Constants.ticksPerRotation);
     double velocityRight = UnitConverter.metersPerSecondToTalonUnits(driveOutput.getRightValue(), Constants.wheelDiameter, Constants.ticksPerRotation);
@@ -450,7 +450,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
     topRightMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     topLeftMotor.setSensorPhase(false);
-    topRightMotor.setSensorPhase(true);
+    topRightMotor.setSensorPhase(false);
     bottomLeftMotor.setSensorPhase(true);
     bottomRightMotor.setSensorPhase(true);
 
@@ -494,7 +494,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   public void outputSmartdashboard() 
   {
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
-      SmartDashboard.putNumber("Top Left Encoder", getTopLeftEncoder());
+      SmartDashboard.putNumber("Top Left Encoder", topLeftMotor.getSelectedSensorPosition());
       SmartDashboard.putNumber("Top Right Encoder", getTopRightEncoder());
       SmartDashboard.putNumber("Strafe", getStrafeEncoder());
       SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
