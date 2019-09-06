@@ -32,6 +32,9 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+//import com.revrobotics.*;
+//import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 /**
  * This is a subsystem class.  A subsystem interacts with the hardware components on the robot.  This subsystem deals with the 
  * mecanum drivetrain.  The drivetrain includes 4 motors with encoders on each, an encoder on a dead wheel to track strafing, and 
@@ -53,6 +56,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
   private TalonSRX topRightMotor;
   private TalonSRX bottomLeftMotor;
   private TalonSRX bottomRightMotor;
+
+  //private CANSparkMax neo;
 
   private AHRS gyro;
 
@@ -99,6 +104,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       bottomLeftMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_LEFT_MOTOR);
       bottomRightMotor = new TalonSRX(RobotMap.DRIVE_BOTTOM_RIGHT_MOTOR);
 
+      //neo = new CANSparkMax(RobotMap.DRIVE_NEO, MotorType.kBrushless);
+
       //strafeEncoder = new Encoder(RobotMap.DRIVE_STRAFE_ENCODER_ACHANNEL, RobotMap.DRIVE_STRAFE_ENCODER_BCHANNEL);
 
       robot_state_ = RobotState.getInstance();
@@ -118,7 +125,7 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
       drivetrain.invertForwardBackward(true);
       drivetrain.invertStrafing(true);
-      drivetrain.invertRotation(false);
+      drivetrain.invertRotation(true);
   }
 
 
@@ -176,9 +183,11 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       }
 
       topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
-      topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
+      topRightMotor.set(ControlMode.PercentOutput, driveOutput.getRightValue());
       bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
       bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
+
+      //neo.set(driveOutput.getLeftValue());
 
       
       prevAngle = getGyroAngle(); //Stores previous angle
@@ -441,8 +450,8 @@ public class Drivetrain extends Subsystem implements ISubsystem{
 
   private void configureTalons()
   {
-    topLeftMotor.setInverted(false);
-    topRightMotor.setInverted(true);
+    topLeftMotor.setInverted(true);
+    topRightMotor.setInverted(false);
     bottomLeftMotor.setInverted(false);
     bottomRightMotor.setInverted(true);
 
