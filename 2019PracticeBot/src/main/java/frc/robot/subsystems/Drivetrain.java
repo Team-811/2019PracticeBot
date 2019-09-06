@@ -245,6 +245,31 @@ public class Drivetrain extends Subsystem implements ISubsystem{
       return percentage <= percentagePathFinished();
   }
 
+  public void loadTrajectoryPathfinder(Waypoint[] path, boolean reverse)
+  {
+      double leftEncoder = (topLeftMotor.getSelectedSensorPosition() + bottomLeftMotor.getSelectedSensorVelocity()) / 2;
+      double rightEncoder = (topRightMotor.getSelectedSensorPosition() + bottomRightMotor.getSelectedSensorVelocity()) / 2;
+      motionProfile.loadTrajectoryPathfinder(path, reverse, (int)leftEncoder, (int)rightEncoder, getGyroAngle());
+  }
+
+  public void followTrajectoryPathfinder(boolean reverse)
+  {
+      double leftEncoder = (topLeftMotor.getSelectedSensorPosition() + bottomLeftMotor.getSelectedSensorVelocity()) / 2;
+      double rightEncoder = (topRightMotor.getSelectedSensorPosition() + bottomRightMotor.getSelectedSensorVelocity()) / 2;
+
+    Output driveOutput = motionProfile.followTrajectoryPathfinder(reverse, (int)leftEncoder, (int)rightEncoder, gyro.getAngle());
+
+    topLeftMotor.set(ControlMode.PercentOutput, driveOutput.getTopLeftValue());
+    topRightMotor.set(ControlMode.PercentOutput, driveOutput.getTopRightValue());
+    bottomLeftMotor.set(ControlMode.PercentOutput, driveOutput.getBottomLeftValue());
+    bottomRightMotor.set(ControlMode.PercentOutput, driveOutput.getBottomRightValue());
+  }
+
+  public boolean isPathFinishedPathfinder()
+  {
+      return motionProfile.isPathfinderPathDone();
+  }
+
 
 
   //Velocity Control
