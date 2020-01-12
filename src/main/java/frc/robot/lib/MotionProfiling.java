@@ -105,7 +105,12 @@ public class MotionProfiling
             System.out.println(pathHash + ".csv not found, wrote to file");
         } else {
             System.out.println(pathHash + ".csv read from file");
-            trajectory = Pathfinder.readFromCSV(trajectoryFile);
+            try {
+                trajectory = Pathfinder.readFromCSV(trajectoryFile);
+            } catch (Exception e) {
+               
+            }
+            
         }        
 
         if(reverse)
@@ -128,7 +133,11 @@ public class MotionProfiling
             System.out.println(pathHash + ".csv not found, wrote to file");
         } else {
             System.out.println(pathHash + ".csv read from file");
-            trajectory = Pathfinder.readFromCSV(trajectoryFile);
+            try
+            {
+                trajectory = Pathfinder.readFromCSV(trajectoryFile);
+            }
+            catch(Exception e){}
         }        
 
         TankModifier modifier = new TankModifier(trajectory);
